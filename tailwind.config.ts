@@ -12,7 +12,12 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         theme: "#41A0E4",
+        quit: "#D83A56"
       },
+      fontSize: {
+        'small-text': ['0.625rem', '15px'],
+        'normal-text': ['0.875rem', '21px'],
+      }
     },
   },
   plugins: [],
