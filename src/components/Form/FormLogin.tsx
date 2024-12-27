@@ -12,12 +12,10 @@ interface FormLogin {
 
 async function OnFinishForm(value: FormLogin) {
   const res = await signIn("credentials", {
-    redirect: false,
+    redirect: true,
     username: value.username,
     password: value.password,
   })
-
-  console.log(res);
 }
 
 export default function FormLogin() {

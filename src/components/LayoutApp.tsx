@@ -9,6 +9,7 @@ import Title from "antd/es/typography/Title";
 import AdminProfile from "./AdminProfile";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/store/user";
+import { useSession } from "next-auth/react";
 
 interface LayoutAppProps {
     children: React.ReactNode;
@@ -19,7 +20,7 @@ export default function LayoutApp({
 }: LayoutAppProps) {
     const route = useRouter();
     const pathname = usePathname();
-    const {logged, role, name, email} = useUserStore();
+    const { data, status } = useSession();
 
     const [selectedMenu, setSelectedMenu] = useState<Array<string>>([]);
 
@@ -28,12 +29,6 @@ export default function LayoutApp({
             setSelectedMenu([pathname]);
         }
     }, [pathname]);
-
-    useEffect(() => {
-        if (!logged) {
-            route.replace('/admin/login')
-        }
-    }, [logged]);
 
     if (pathname === '/admin/login') {
         return (
@@ -47,15 +42,15 @@ export default function LayoutApp({
                 <div className="flex items-center justify-between">
                     <Title>Logo</Title>
                     {
-                        role === 'user' && (
+                        data?.user.user.role === 'user' && (
                             <SearchBox/>
                         )
                     }
                     {
-                        role === 'admin' && <AdminProfile name="Kristian Ruben"/>
+                        data?.user.user.role === 'admin' && <AdminProfile name="Kristian Ruben"/>
                     }
                     {
-                        !logged && (
+                        !data && pathname === "/" && (
                             <div className="flex gap-4">
                                 <Button style={{color: "#41A0E4"}} variant="solid">MASUK</Button>
                                 <Button style={{backgroundColor: "#41A0E4", color: "white"}} variant="outlined">DAFTAR</Button>
@@ -66,7 +61,7 @@ export default function LayoutApp({
             </Header>
             <Layout>
                 {
-                    role === 'admin' && (
+                    data?.user.user.role === 'admin' && (
                         <Sider style={{backgroundColor: "white"}}>
                             <Menu
                                 onSelect={(info) => {

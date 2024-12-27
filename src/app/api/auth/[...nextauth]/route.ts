@@ -21,14 +21,15 @@ export const authOptions: AuthOptions = {
             session.user = token.user;
 
             return session;
-        }
+        },
     },
     pages: {
         signIn: "/login"
     },
     providers: [
         Credentials({
-            name: "Credentials-User",
+            name: "credentials",
+            id: "credentials",
             credentials: {
                 username: { label: "Username", type: "text", placeholder: "Email/Phone Number"},
                 password: { label: "Password", type: "password"}
@@ -39,9 +40,7 @@ export const authOptions: AuthOptions = {
                     password: string;
                 };
 
-                console.log(username, password);
-
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/user/login`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/admin/login`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -65,7 +64,9 @@ export const authOptions: AuthOptions = {
                 throw new Error("Login failed");
             },
         })
-    ]
+    ],
+    secret: process.env.AUTH_SECRET
 }
 
-export default NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

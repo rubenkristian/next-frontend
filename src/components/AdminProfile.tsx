@@ -1,5 +1,6 @@
 import { PoweroffOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Card, Flex, Popover, Space, Typography } from "antd";
+import { signOut } from "next-auth/react";
 
 const { Text } = Typography;
 
@@ -19,7 +20,15 @@ const PopupProfile = ({email, name}: {email: string; name: string;}) => {
             </div>
             }
         >
-            <div className="flex gap-2 justify-center text-quit"><PoweroffOutlined /> <span>Keluar</span></div>
+            <a 
+                onClick={(e) => {
+                    e.preventDefault();
+                    signOut();
+                }}
+                className="flex gap-2 justify-center text-quit">
+                    <PoweroffOutlined /> 
+                    <span>Keluar</span>
+            </a>
         </Card>
     )
 }
